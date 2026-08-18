@@ -20,7 +20,6 @@
         - status
         - Area de atuação da tarefa
         - tipo de tarefa
-        - projeto relacionado (opicional)
         
     - Projetos
         - Tarefas relacionadas
