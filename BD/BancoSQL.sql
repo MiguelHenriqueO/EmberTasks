@@ -14,15 +14,18 @@ CREATE TABLE projeto(
 	status varchar(80) NOT NULL,
 	dataCriacao date NOT NULL,
 	dataMax date NOT NULL,
+
 	criadorID int NOT NULL references usuario(idUsuario)
 );
 
 CREATE TABLE usuarioProjeto (
 	idUserProj int GENERATED ALWAYS AS IDENTITY PRIMARY KEY ,
+    administrador boolean NOT NULL default false,
+    
 	idUsuario int NOT NULL REFERENCES usuario(idUsuario),
 	idProjeto int NOT NULL REFERENCES projeto(idProjeto),
 	cargo varchar(80) NOT NULL,
-	administrador boolean NOT NULL default false,
+
 
 	unique (idUsuario,idProjeto)
 );
@@ -138,7 +141,6 @@ VALUES
     );
 
 
--- Tarefa de Front-End do Projeto 1
 INSERT INTO tarefa
     (descricao, status, area_atuacao, tipo, dataCriacao, dataMax, idProjeto, idCriador)
 VALUES
@@ -154,7 +156,6 @@ VALUES
     );
 
 
--- Tarefa de Design do Projeto 1
 INSERT INTO tarefa
     (descricao, status, area_atuacao, tipo, dataCriacao, dataMax, idProjeto, idCriador)
 VALUES
@@ -170,7 +171,6 @@ VALUES
     );
 
 
--- Tarefa de Back-End do Projeto 2
 INSERT INTO tarefa
     (descricao, status, area_atuacao, tipo, dataCriacao, dataMax, idProjeto, idCriador)
 VALUES
@@ -186,13 +186,6 @@ VALUES
     );
 
 
--- ============================================
--- ADMINISTRADORES DAS TAREFAS
--- ============================================
-
--- Tarefa 2:
--- Miguel e João são administradores
-
 select * from tarefaADM
 
 INSERT INTO tarefaADM
@@ -202,17 +195,12 @@ VALUES
     (2, 5);
 
 
--- Tarefa 3:
--- João é administrador
 
 INSERT INTO tarefaADM
     (idUsuario, idTarefa)
 VALUES
-    (2, 6);
+    (2, 4);
 
-
--- Tarefa 4:
--- Maria é administradora
 
 INSERT INTO tarefaADM
     (idUsuario, idTarefa)
@@ -220,13 +208,12 @@ VALUES
     (4, 1);
 
 
--- Tarefa 5:
--- João é administrador
-
 INSERT INTO tarefaADM
     (idUsuario, idTarefa)
 VALUES
-    (2, 8);
+    (2, 3);
+
+select * from tarefa
 
 INSERT INTO comentario
     (conteudo, dataCriacao, fixado, idUsuario, idTarefa)
@@ -250,21 +237,21 @@ VALUES
         '2026-08-16',
         TRUE,
         2,
-        6
+        4
     ),
     (
         'Identidade visual finalizada.',
         '2026-08-17',
         FALSE,
         4,
-        7
+        3
     ),
     (
         'O banco ainda precisa das tabelas de autenticação.',
         '2026-08-17',
         FALSE,
         2,
-        8
+        2
     );
 
 select * from comentario

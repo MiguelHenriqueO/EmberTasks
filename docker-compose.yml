@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  db-EmberTasks:
+    image: postgres:18-alpine 
+    container_name: EmberTasks_Banco
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "${SenhaBanco}"
+      POSTGRES_DB: EmberTasks
+    volumes:
+      - dados_postgres:/var/lib/postgresql/data
+
+volumes:
+  dados_postgres:
