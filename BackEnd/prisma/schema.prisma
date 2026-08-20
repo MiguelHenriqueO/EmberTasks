@@ -1,8 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
@@ -12,22 +10,98 @@ datasource db {
   provider = "postgresql"
 }
 
-model Usuario{
-  idUsuario int @id.@default(autoincrement())
-  nome String @bd.Varchar(80)
-  email String @unique.@bd.Varchar(80)
-  senha String @bd.Varchar(255)
+model Usuario {
+  idUsuario Int @id @default(autoincrement())
+  nome      String @db.VarChar(80)
+  email     String @unique @db.VarChar(80)
+  senha     String @db.VarChar(255)
 
+  projetos        Projeto[]
+  usuarioProjetos UsuarioProjeto[]
+  tarefas         Tarefa[]
+  comentarios     Comentario[]
+  tarefasADM      TarefaADM[]
 
+  @@map("usuario")
 }
 
-model Projeto{
-  idProjeto int @id.@default(autoincrement())
-  nome String @bd.Varchar(80)
-  descricao String @bd.Varchar(250)
-  status String @bd.Varchar(80)
-  dataCriacao DateTime @bd.Date
-  dataMax DateTime @bd.Date
+model Projeto {
+  idProjeto   Int      @id @default(autoincrement())
+  nome        String   @db.VarChar(80)
+  descricao   String   @db.VarChar(250)
+  status      String   @db.VarChar(80)
+  dataCriacao DateTime @db.Date
+  dataMax     DateTime @db.Date
 
+  criadorID   Int
+  criador     Usuario  @relation(fields: [criadorID], references: [idUsuario])
+
+  tarefas         Tarefa[]
+  usuarioProjetos UsuarioProjeto[]
+
+  @@map("projeto")
 }
 
+model UsuarioProjeto {
+  idUserProj    Int     @id @default(autoincrement())
+  administrador Boolean @default(false)
+  cargo         String  @db.VarChar(80)
+
+  idUsuario Int
+  usuario   Usuario @relation(fields: [idUsuario], references: [idUsuario])
+
+  idProjeto Int
+  projeto   Projeto @relation(fields: [idProjeto], references: [idProjeto])
+
+  @@unique([idUsuario, idProjeto])
+  @@map("usuarioProjeto")
+}
+
+model Tarefa {
+  idTarefa     Int      @id @default(autoincrement())
+  descricao    String   @db.VarChar(250)
+  status       String   @db.VarChar(50)
+  area_atuacao String   @db.VarChar(80)
+  tipo         String   @db.VarChar(50)
+  dataCriacao  DateTime @db.Date
+  dataMax      DateTime @db.Date
+
+  idProjeto Int?
+  projeto   Projeto? @relation(fields: [idProjeto], references: [idProjeto])
+
+  idCriador Int?
+  criador   Usuario? @relation(fields: [idCriador], references: [idUsuario])
+
+  tarefasADM  TarefaADM[]
+  comentarios Comentario[]
+
+  @@map("tarefa")
+}
+
+model Comentario {
+  idComentario Int      @id @default(autoincrement())
+  conteudo     String   @db.VarChar(250)
+  dataCriacao  DateTime @db.Date
+  fixado       Boolean  @default(false)
+
+  idUsuario Int
+  usuario   Usuario @relation(fields: [idUsuario], references: [idUsuario])
+
+  idTarefa Int
+  tarefa   Tarefa  @relation(fields: [idTarefa], references: [idTarefa])
+
+  @@map("comentario")
+}
+
+model TarefaADM {
+  idAdm Int @id @default(autoincrement())
+
+  idUsuario Int
+  usuario   Usuario @relation(fields: [idUsuario], references: [idUsuario])
+
+  idTarefa Int
+  tarefa   Tarefa  @relation(fields: [idTarefa], references: [idTarefa])
+
+  @@unique([idUsuario, idTarefa])
+  @@map("tarefaADM")
+}
