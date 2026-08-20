@@ -88,3 +88,11 @@ model usuarioprojeto {
 
   @@unique([idusuario, idprojeto])
 }
+
+/**
+ * enum cargo {
+ * ADM
+ * COOP
+ * USER
+ * }
+ */
