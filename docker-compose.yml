@@ -1,4 +1,4 @@
-version: '3.8'
+
 
 services:
   db-EmberTasks:
@@ -12,7 +12,7 @@ services:
       POSTGRES_PASSWORD: "${SenhaBanco}"
       POSTGRES_DB: EmberTasks
     volumes:
-      - dados_postgres:/var/lib/postgresql/data
+      - dados_postgres:/var/lib/postgresql
 
 volumes:
   dados_postgres:
